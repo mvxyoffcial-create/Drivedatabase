@@ -146,6 +146,56 @@ export const HotlinkModal: React.FC<HotlinkModalProps> = ({ file, onClose }) => 
             </p>
           </div>
 
+          {/* Drive Cloud "Link Generated !" Page Card */}
+          <div className="p-4 rounded-xl bg-gradient-to-br from-indigo-950/50 via-zinc-900 to-blue-950/40 border border-indigo-500/40">
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-xs font-bold uppercase tracking-wider text-indigo-300 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
+                Drive Cloud "Link Generated !" Download Page
+              </label>
+              <span className="text-[11px] text-cyan-300 flex items-center gap-1">
+                <Zap className="h-3.5 w-3.5 text-cyan-400" />
+                Drive Cloud Branded
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                readOnly
+                value={`${origin}/download/${file.id}`}
+                className="w-full px-3 py-2 text-xs font-mono bg-zinc-950 border border-indigo-700/60 rounded-lg text-indigo-200 focus:outline-none focus:border-indigo-400 select-all"
+              />
+              <button
+                onClick={() => copyToClipboard(`${origin}/download/${file.id}`, 'driveCloud')}
+                className="px-3 py-2 text-xs font-medium rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white flex items-center gap-1.5 shrink-0 transition-colors shadow-sm shadow-indigo-900"
+              >
+                {copiedKey === 'driveCloud' ? (
+                  <>
+                    <Check className="h-3.5 w-3.5 text-white" />
+                    <span>Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="h-3.5 w-3.5" />
+                    <span>Copy Page URL</span>
+                  </>
+                )}
+              </button>
+              <a
+                href={`${origin}/download/${file.id}`}
+                target="_blank"
+                rel="noreferrer"
+                className="p-2 rounded-lg bg-indigo-900/60 hover:bg-indigo-800 text-indigo-200 hover:text-white transition-colors border border-indigo-600/40"
+                title="Open Drive Cloud page in new tab"
+              >
+                <ExternalLink className="h-4 w-4" />
+              </a>
+            </div>
+            <p className="text-[11px] text-indigo-300/80 mt-2">
+              Shareable link opening the <b>Drive Cloud</b> "Link Generated !" page with mascot illustration, download button, and 10 Gbps speeds.
+            </p>
+          </div>
+
           {/* Embed Format Selector */}
           <div>
             <div className="flex border-b border-zinc-800 gap-2 mb-4 overflow-x-auto pb-1 text-xs">

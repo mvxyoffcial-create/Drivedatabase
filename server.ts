@@ -154,6 +154,35 @@ function seedSampleFiles() {
 
     saveMetadata(metadata);
   }
+
+  // Ensure Drive Cloud requested file 5db802f1de96 exists
+  const currentMeta = loadMetadata();
+  const driveCloudId = '5db802f1de96';
+  if (!currentMeta[driveCloudId]) {
+    const fileName = 'The.India.Story.2026.480p.WEB-DL.x264.ACC.ESub.Mvxy.site.mkv';
+    const storageName = `${driveCloudId}_${fileName}`;
+    const filePath = path.join(FILES_DIR, storageName);
+
+    if (!fs.existsSync(filePath)) {
+      // Create valid sample binary stream payload
+      fs.writeFileSync(filePath, Buffer.alloc(1024 * 512, 0x5a));
+    }
+
+    currentMeta[driveCloudId] = {
+      id: driveCloudId,
+      originalName: fileName,
+      sanitizedName: fileName,
+      storageName,
+      mimeType: 'video/x-matroska',
+      size: 552178240, // 526.6 MB
+      uploadedAt: new Date(Date.now() - 3600000 * 1).toISOString(),
+      downloads: 1420,
+      hotlinkViews: 4890,
+      bandwidthUsed: 1420 * 552178240,
+      sha256: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+    };
+    saveMetadata(currentMeta);
+  }
 }
 
 seedSampleFiles();
@@ -714,12 +743,17 @@ app.get(['/raw/:id', '/raw/:id/:filename', '/f/:id', '/f/:id/:filename', '/api/r
   streamFileWithRanges(req, res, filePath, fileInfo.originalName, fileInfo.mimeType, false, id);
 });
 
-// 4. Force Direct Download Endpoint
+// 4. Download & Drive Cloud Page Endpoints
 // Supports /dl/:id, /dl/:id/:filename, and /api/download/:id/:filename
 app.get(['/dl/:id', '/dl/:id/:filename', '/api/download/:id/:filename?'], (req, res) => {
   const { id } = req.params;
   const metadata = loadMetadata();
   const fileInfo = metadata[id];
+
+  // If opened in a web browser expecting HTML and not explicitly forcing direct binary stream, redirect to the Drive Cloud page
+  if (req.headers.accept && req.headers.accept.includes('text/html') && req.query.direct !== '1' && req.query.download !== '1') {
+    return res.redirect(`/download/${id}`);
+  }
 
   if (!fileInfo) {
     return res.status(404).send('File not found or expired.');
@@ -727,6 +761,15 @@ app.get(['/dl/:id', '/dl/:id/:filename', '/api/download/:id/:filename?'], (req, 
 
   const filePath = path.join(FILES_DIR, fileInfo.storageName);
   streamFileWithRanges(req, res, filePath, fileInfo.originalName, fileInfo.mimeType, true, id);
+});
+
+// 4b. Dedicated Drive Cloud Download Page Route
+app.get(['/download/:id', '/d/:id'], (req, res, next) => {
+  if (process.env.NODE_ENV === 'production') {
+    const distPath = path.join(process.cwd(), 'dist');
+    return res.sendFile(path.join(distPath, 'index.html'));
+  }
+  next();
 });
 
 // 5. Delete a file

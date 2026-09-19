@@ -9,6 +9,7 @@ import { ApiDocsModal } from './components/ApiDocsModal';
 import { TelegramBotModal } from './components/TelegramBotModal';
 import { StoredFile, StorageStats } from './types';
 import { Zap, ShieldCheck, Globe, RefreshCw, Cpu, CheckCircle, Code, ArrowRight, Bot, Server } from 'lucide-react';
+import { DriveCloudDownloadPage } from './components/DriveCloudDownloadPage';
 
 export default function App() {
   const [files, setFiles] = useState<StoredFile[]>([]);
@@ -18,6 +19,23 @@ export default function App() {
   const [isSpeedTestOpen, setIsSpeedTestOpen] = useState<boolean>(false);
   const [isApiDocsOpen, setIsApiDocsOpen] = useState<boolean>(false);
   const [isTelegramModalOpen, setIsTelegramModalOpen] = useState<boolean>(false);
+
+  // Drive Cloud route detection (/download/:id, /d/:id, /api/download/:id)
+  const [downloadFileId, setDownloadFileId] = useState<string | null>(() => {
+    const path = window.location.pathname;
+    const match = path.match(/^\/(?:download|d|api\/download)\/([a-zA-Z0-9_-]+)/);
+    return match ? match[1] : null;
+  });
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const path = window.location.pathname;
+      const match = path.match(/^\/(?:download|d|api\/download)\/([a-zA-Z0-9_-]+)/);
+      setDownloadFileId(match ? match[1] : null);
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   const fetchFiles = async () => {
     try {
@@ -60,6 +78,18 @@ export default function App() {
       console.error('Failed to delete file:', err);
     }
   };
+
+  if (downloadFileId) {
+    return (
+      <DriveCloudDownloadPage
+        fileId={downloadFileId}
+        onBack={() => {
+          window.history.pushState({}, '', '/');
+          setDownloadFileId(null);
+        }}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col font-sans">
