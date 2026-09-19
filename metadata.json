@@ -1,0 +1,6 @@
+{
+  "name": "Permanent File Host",
+  "description": "High-speed permanent file hosting supporting thousands of GBs (Terabytes) with Telegram Bot uploader, Koyeb port 8080 deployment, multi-file batch queue, direct hotlinks, 10 Gbps unthrottled CDN downloads, crash-safe database, and public REST API.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

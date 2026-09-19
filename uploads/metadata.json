@@ -1,0 +1,28 @@
+{
+  "fast-cdn-demo": {
+    "id": "fast-cdn-demo",
+    "originalName": "10gbps_benchmark_payload.bin",
+    "sanitizedName": "10gbps_benchmark_payload.bin",
+    "storageName": "fast-cdn-demo_10gbps_benchmark_payload.bin",
+    "mimeType": "application/octet-stream",
+    "size": 1048576,
+    "uploadedAt": "2026-09-18T23:21:16.809Z",
+    "downloads": 429,
+    "hotlinkViews": 1892,
+    "bandwidthUsed": 2433744896,
+    "sha256": "9110073e562ad3c7bba0f03d7ec3881bd05cb4e13bb7fab6a63e704f3c80e08c"
+  },
+  "hyper-badge": {
+    "id": "hyper-badge",
+    "originalName": "10gbps-highspeed-badge.svg",
+    "sanitizedName": "10gbps-highspeed-badge.svg",
+    "storageName": "hyper-badge_10gbps-highspeed-badge.svg",
+    "mimeType": "image/svg+xml",
+    "size": 854,
+    "uploadedAt": "2026-09-19T01:21:16.810Z",
+    "downloads": 145,
+    "hotlinkViews": 5411,
+    "bandwidthUsed": 4620994,
+    "sha256": "b77cfd8d0fe77b66821113bd442e55b7f0708a66036a020756664bd1db6e7b8a"
+  }
+}

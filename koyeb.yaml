@@ -1,0 +1,36 @@
+# Koyeb Deployment Configuration
+# Port: 8080 | HTTP Protocol | Persistent Disk for permanent uploads
+name: permanent-file-host
+services:
+  - name: web
+    type: web
+    regions:
+      - fra
+    env:
+      - key: PORT
+        value: "8080"
+      - key: NODE_ENV
+        value: "production"
+      - key: TELEGRAM_API_ID
+        value: "" # From my.telegram.org -> API development tools
+      - key: TELEGRAM_API_HASH
+        value: "" # From my.telegram.org -> API development tools
+      - key: TELEGRAM_BOT_TOKEN
+        value: "" # From @BotFather
+      - key: APP_BASE_URL
+        value: ""
+    ports:
+      - port: 8080
+        path: /
+        protocol: http
+    routes:
+      - path: /
+        port: 8080
+    health_checks:
+      - http:
+          path: /api/health
+          port: 8080
+    volumes:
+      - path: /app/uploads
+        name: file-storage
+        size: 50GB
