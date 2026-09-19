@@ -511,13 +511,16 @@ export const TelegramBotModal: React.FC<TelegramBotModalProps> = ({ isOpen, onCl
                   <div className="max-w-md rounded-2xl rounded-tl-sm bg-zinc-900 border border-zinc-800 p-3.5 text-xs text-zinc-200 space-y-2.5 shadow-xl">
                     <div className="flex items-center gap-1.5 text-cyan-400 font-bold text-xs">
                       <Zap className="h-4 w-4 animate-pulse text-cyan-400" />
-                      <span>Transferring massive file (MTProto 4 GB Pipeline):</span>
+                      <span>Transferring massive file (MTProto Ultra 1000 Mbps Pipeline):</span>
                     </div>
 
                     <div className="text-[11px] text-zinc-300 space-y-0.5 font-mono">
                       <div>📁 <b>File:</b> Ubuntu_24_Server_x64.iso</div>
-                      <div>📦 <b>Progress:</b> 2.45 GB / 3.42 GB (<b>71%</b>)</div>
-                      <div>⚡ <b>Pipeline:</b> Direct MTProto binary to 10 Gbps Node</div>
+                      <div>📊 <b>Progress:</b> <code>[████████░░░░]</code> <b>71%</b></div>
+                      <div>📦 <b>Transferred:</b> 2.45 GB / 3.42 GB</div>
+                      <div>🚀 <b>Speed:</b> <b className="text-cyan-300">112.4 MB/s</b> (~899.2 Mbps)</div>
+                      <div>⏱️ <b>ETA:</b> 8s</div>
+                      <div>⚡ <b>Pipeline:</b> MTProto 12x Accelerated Stream Engine</div>
                     </div>
 
                     {/* Progress Bar */}
@@ -526,7 +529,7 @@ export const TelegramBotModal: React.FC<TelegramBotModalProps> = ({ isOpen, onCl
                     </div>
 
                     <div className="text-[10px] text-zinc-400 flex items-center justify-between pt-1 border-t border-zinc-800/80">
-                      <span>Streaming byte-by-byte into permanent storage...</span>
+                      <span>Streaming directly into permanent storage node...</span>
                       <span>21:05</span>
                     </div>
                   </div>
@@ -537,13 +540,15 @@ export const TelegramBotModal: React.FC<TelegramBotModalProps> = ({ isOpen, onCl
                   <div className="max-w-md rounded-2xl rounded-tl-sm bg-zinc-900 border border-zinc-800 p-3.5 text-xs text-zinc-200 space-y-2.5 shadow-xl">
                     <div className="flex items-center gap-1.5 text-emerald-400 font-bold text-xs">
                       <CheckCircle2 className="h-4 w-4" />
-                      <span>File Permanently Hosted (4 GB MTProto Pipeline)!</span>
+                      <span>File Permanently Hosted (MTProto Ultra 1000 Mbps Pipeline)!</span>
                     </div>
 
                     <div className="text-[11px] text-zinc-300 space-y-0.5 font-mono">
                       <div>📁 <b>File:</b> Ubuntu_24_Server_x64.iso</div>
                       <div>📦 <b>Size:</b> 3.42 GB &bull; application/x-iso9660-image</div>
-                      <div>⚡ <b>Speed Tier:</b> 10 Gbps Unthrottled CDN</div>
+                      <div>⚡ <b>Speed Tier:</b> 10 Gbps Unthrottled CDN (Permanent)</div>
+                      <div>🚀 <b>Avg Speed:</b> 108.7 MB/s (~869.6 Mbps) &bull; <b>Time:</b> 31.4s</div>
+                      <div>💾 <b>Storage Status:</b> Permanent Zero-Decay Disk (WAL Verified)</div>
                     </div>
 
                     <div className="p-2.5 rounded-lg bg-zinc-950 border border-zinc-800 space-y-1">
