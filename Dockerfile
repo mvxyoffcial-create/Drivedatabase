@@ -7,7 +7,7 @@ WORKDIR /app
 
 # Install dependencies
 COPY package*.json ./
-RUN npm ci
+RUN if [ -f package-lock.json ]; then npm ci --legacy-peer-deps; else npm install --legacy-peer-deps --no-audit; fi
 
 # Copy source and build
 COPY . .
@@ -23,7 +23,7 @@ ENV PORT=8080
 
 # Install production dependencies only
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN if [ -f package-lock.json ]; then npm ci --omit=dev --legacy-peer-deps; else npm install --omit=dev --legacy-peer-deps --no-audit; fi
 
 # Copy built server bundle and static web assets
 COPY --from=builder /app/dist ./dist
