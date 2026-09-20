@@ -784,11 +784,8 @@ app.get(['/dl/:id', '/dl/:id/:filename', '/api/download/:id/:filename?'], (req, 
 
 // 4b. Dedicated Drive Cloud Download Page Route
 app.get(['/download/:id', '/d/:id'], (req, res, next) => {
-  if (process.env.NODE_ENV === 'production') {
-    const distPath = path.join(process.cwd(), 'dist');
-    return res.sendFile(path.join(distPath, 'index.html'));
-  }
-  next();
+  const distPath = path.join(process.cwd(), process.env.NODE_ENV === 'production' ? 'dist' : '', 'index.html');
+  return res.sendFile(distPath);
 });
 
 // 5. Delete a file
