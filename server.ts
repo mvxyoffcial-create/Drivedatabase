@@ -57,6 +57,25 @@ export interface StoredFile {
   sha256: string;
 }
 
+// Admin Authentication Middleware
+const adminAuth = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  const username = process.env.ADMIN_USERNAME || 'sandeepa';
+  const password = process.env.ADMIN_PASSWORD || 'Venura@8907';
+
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  const [authUsername, authPassword] = Buffer.from(authHeader.split(' ')[1] || '', 'base64').toString().split(':');
+
+  if (authUsername === username && authPassword === password) {
+    next();
+  } else {
+    res.status(401).json({ error: 'Unauthorized' });
+  }
+};
+
 function loadMetadata(): Record<string, StoredFile> {
   try {
     if (fs.existsSync(METADATA_FILE)) {
@@ -306,7 +325,7 @@ function streamFileWithRanges(
 // API Routes
 
 // 1. Standard Upload File(s) (Up to 100GB per file)
-app.post('/api/upload', upload.array('files', 20), async (req, res) => {
+app.post('/api/upload', adminAuth, upload.array('files', 20), async (req, res) => {
   try {
     const files = req.files as Express.Multer.File[];
     if (!files || files.length === 0) {
@@ -356,7 +375,7 @@ app.post('/api/upload', upload.array('files', 20), async (req, res) => {
 });
 
 // 1b. Chunked Upload Initialization (for huge files up to 100GB)
-app.post('/api/upload/chunk/init', (req, res) => {
+app.post('/api/upload/chunk/init', adminAuth, (req, res) => {
   try {
     const { fileName, fileSize, mimeType, totalChunks } = req.body;
     if (!fileName || !fileSize) {
@@ -381,7 +400,7 @@ app.post('/api/upload/chunk/init', (req, res) => {
 });
 
 // 1c. Chunk Upload Receiver
-app.post('/api/upload/chunk', uploadChunk.single('chunk'), (req, res) => {
+app.post('/api/upload/chunk', adminAuth, uploadChunk.single('chunk'), (req, res) => {
   try {
     const { uploadId, chunkIndex } = req.body;
     if (!uploadId || chunkIndex === undefined) {
@@ -400,7 +419,7 @@ app.post('/api/upload/chunk', uploadChunk.single('chunk'), (req, res) => {
 });
 
 // 1d. Chunk Upload Completion & Assembly
-app.post('/api/upload/chunk/complete', async (req, res) => {
+app.post('/api/upload/chunk/complete', adminAuth, async (req, res) => {
   try {
     const { uploadId, fileName, mimeType, totalChunks, fileSize } = req.body;
     if (!uploadId || !fileName || !totalChunks) {
@@ -773,7 +792,7 @@ app.get(['/download/:id', '/d/:id'], (req, res, next) => {
 });
 
 // 5. Delete a file
-app.delete('/api/files/:id', (req, res) => {
+app.delete('/api/files/:id', adminAuth, (req, res) => {
   const { id } = req.params;
   const metadata = loadMetadata();
   const fileInfo = metadata[id];

@@ -40,23 +40,11 @@ export const DriveCloudDownloadPage: React.FC<DriveCloudDownloadPageProps> = ({ 
           const data = await res.json();
           setFile(data.file || null);
         } else {
-          // Fallback if file not yet indexed
-          setFile({
-            id: fileId,
-            originalName: 'The.India.Story.2026.480p.WEB-DL.x264.ACC.ESub.Mvxy.site.mkv',
-            sanitizedName: 'The.India.Story.2026.480p.WEB-DL.x264.ACC.ESub.Mvxy.site.mkv',
-            storageName: `${fileId}_The.India.Story.2026.480p.WEB-DL.x264.ACC.ESub.Mvxy.site.mkv`,
-            mimeType: 'video/x-matroska',
-            size: 552178240, // 526.6 MB
-            uploadedAt: new Date().toISOString(),
-            downloads: 1420,
-            hotlinkViews: 4890,
-            bandwidthUsed: 1420 * 552178240,
-            sha256: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
-          });
+          setFile(null);
         }
       } catch (e) {
         console.error('Failed to load file details:', e);
+        setFile(null);
       } finally {
         setIsLoading(false);
       }
@@ -64,6 +52,9 @@ export const DriveCloudDownloadPage: React.FC<DriveCloudDownloadPageProps> = ({ 
 
     fetchFile();
   }, [fileId]);
+
+  if (isLoading) return <div className="p-10 text-center">Loading...</div>;
+  if (!file) return <div className="p-10 text-center text-red-500">File not found or expired.</div>;
 
   const formatBytes = (bytes: number): string => {
     if (!bytes || bytes === 0) return '0 Bytes';
